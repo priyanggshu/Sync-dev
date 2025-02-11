@@ -4,33 +4,61 @@ import mongoose from "mongoose";
 import http from "http";
 import cors from "cors";
 import path from "path";
-import { Server } from "socket.io";
+import { fileURLToPath } from "url";
+import morgan from "morgan";
+import passport from "passport";
+import authRoutes from "./routes/auth.routes.js"
+import { initializeSocket } from "./sockets/socketHandler.js";
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 
 // middlewares specific to express
 app.use(express.json());
 app.use(cors());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(morgan("dev")); 
 
 // DB connector
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("DB connected"))
-  .catch((err) => console.error(`DB connection error: ${err}`));
+  .catch((err) =>{ 
+    console.error(`DB connection error: ${err}`)
+    process.exit(1);
+  });
 
 // HTTP server setup
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: { origin: "*" },
-  maxHttpBufferSize: 1e8,
-  pingTimeout: 60000,
-});
+
+// Socket initialization
+initializeSocket(server);
+
+app.use(passport.initialize());
+
+app.use(express.static(path.join(__dirname, "public")));
 
 // routing
 app.use('/auth', authRoutes);
 
-app.listen(process.env.PORT || 3003, () => {
+if(process.env.NODE_ENV === "production") {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+  });
+}
+
+server.listen(process.env.PORT || 3003, () => {
   console.log(`App listening on port ${process.env.PORT || 3003}`);
 });
+
+const shutdown = async () => {
+  console.log(`🔴 Closing Server..`);
+  await mongoose.connection.close();
+  process.exit(0);
+};
+
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);

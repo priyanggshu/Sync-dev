@@ -4,7 +4,7 @@ const UserSchema = mongoose.Schema({
     username: {
         type: String,
         required: true,
-        unique: true,
+        unique: true
     },
     email: {
         type: String,
@@ -13,8 +13,10 @@ const UserSchema = mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
+        default: null
     },
+    googleDriveAccessToken: String,
+    googleDriveAccessToken: String,
 });
 
 export default new mongoose.model('User', UserSchema);
