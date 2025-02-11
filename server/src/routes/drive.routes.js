@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { google } from "googleapis";
 import User from "../db/User.js";
-import { protect } from "../middlewares/auth.protect.js";
+import { protect } from "../middlewares/protect.js";
+import { Readable } from "stream";
 
 const router = Router();
 const oauth2Client = new google.auth.OAuth2(
@@ -45,16 +46,20 @@ router.post("/upload", protect, async (req, res) => {
         const response = await drive.files.create({
             requestBody: {
                 name: fileName,
-                mimeType: "text/plain"
+                mimeType: "text/plain",
+                parents: user.googleDriveFolderId ? [user.googleDriveFolderId] : []
             },
             media: {
                 mimeType: "text/plain",
-                body: Buffer.from(fileContent, "utf-8")
+                body: Readable.from(fileContent)
             }
         })
         res.json({ fileId: response.data.id, name: fileName, success: true });
     } catch (error) {
-        res.status(500).json({ message: "Google Drive upload failed", error})
+        console.error(`Google Drive Upload Error`, error.response?.data || error.message || error)
+        res.status(500).json({ message: `Google Drive upload failed`, 
+            error: error.response?.data || error.message || error
+        })
     }
 });
 

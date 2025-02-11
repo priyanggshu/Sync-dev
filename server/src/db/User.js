@@ -16,7 +16,7 @@ const UserSchema = mongoose.Schema({
         default: null
     },
     googleDriveAccessToken: String,
-    googleDriveAccessToken: String,
-});
+    googleDriveRefreshToken: String,
+}, { timestamps: true});
 
-export default new mongoose.model('User', UserSchema);
+export default mongoose.model('User', UserSchema);

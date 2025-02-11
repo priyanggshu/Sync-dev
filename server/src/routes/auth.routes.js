@@ -4,7 +4,7 @@ import {
   selfController,
   signupController,
 } from "../controllers/auth.controller";
-import { protect } from "../middlewares/auth.protect";
+import { protect } from "../middlewares/protect";
 import passport from "passport";
 
 const router = Router();
