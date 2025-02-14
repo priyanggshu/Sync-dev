@@ -13,6 +13,14 @@ export default function AppRoutes() {
       <Route
         path="/dashboard"
         element={
+          // <ProtectedRoute>
+            <Dashboard />
+          // </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/editor"
+        element={
           <ProtectedRoute>
             <Dashboard />
           </ProtectedRoute>
