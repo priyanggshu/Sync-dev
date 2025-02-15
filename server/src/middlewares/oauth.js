@@ -40,12 +40,12 @@ passport.use(
                 }
 
                 const token = jwt.sign(
-                    { userId: user.id, user: user.username },
+                    { userId: user.id, username: user.username },
                     process.env.JWT_SECRET,
-                    { expiresIn: '8h'}
+                    { expiresIn: '8h' }
                 );
 
-                return done(null, { user, token, refreshToken: refreshToken || user.googleDriveRefreshToken || null });
+                return done(null, { user, token, refreshToken: user.googleDriveRefreshToken || null });
             } catch (error) {
                 console.error(`Google OAuth Error:`, error);
                 return done(error, null);

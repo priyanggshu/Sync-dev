@@ -3,8 +3,8 @@ import {
   loginController,
   selfController,
   signupController,
-} from "../controllers/auth.controller";
-import { protect } from "../middlewares/protect";
+} from "../controllers/auth.controller.js";
+import { protect } from "../middlewares/protect.js";
 import passport from "passport";
 
 const router = Router();
@@ -25,13 +25,14 @@ router.get("/google",
 );
 
 router.get("/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login?error=oauth_failed" }),
+  passport.authenticate("google", { failureRedirect: "/login?error=oauth_failed", session: false }),
   (req, res) => {
 
     if(!req.user || !req.user.token) {
       return res.redirect("/login?error=auth_failed");
     }
-    const redirectUrl = `/dashboard?token=${encodeURIComponent(req.user.token)}&refreshToken=${encodeURIComponent(req.user.refreshToken || '')}&googleDriveAccessToken=${encodeURIComponent(req.user?.user?.googleDriveAccessToken || '')}`;
+    const frontendURL = process.env.FRONTEND_URL || "http://localhost:3000";
+    const redirectUrl = (`${frontendURL}/auth-success?token=${req.user.token}&refreshToken=${req.user.refreshToken || ''}&googleDriveAccessToken=${req.user?.user?.googleDriveAccessToken || ''}`);
 
     res.redirect(redirectUrl);
     }

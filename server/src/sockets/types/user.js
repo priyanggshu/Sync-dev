@@ -4,12 +4,12 @@ export const USER_CONNECTION_STATUS = {
 };
 
 export const USER = {
-    username: string,
-    roomId: string,
+    username: String,
+    roomId: String,
     status: USER_CONNECTION_STATUS,
     cursorPosition: Number,
     typing: Boolean,
-    currentFile: string | null,
-    socketId: string
+    currentFile: String | null,
+    socketId: String
 };
 

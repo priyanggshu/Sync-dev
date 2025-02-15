@@ -65,8 +65,12 @@ export const loginController = async (req, res) => {
 
 export const selfController = async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).select("-password");
+    console.log("Inside /auth/me route");
+    console.log("Request User Object:", req.user); // Debugging log
 
+    const user = await User.findById(req.user._id).select("-password");
+
+    console.log(user);
     if(!user) return res.status(404).json({ message: "User not found" });
     let files = [];
 
@@ -100,6 +104,7 @@ export const selfController = async (req, res) => {
     }
     res.json({ user, files });
   } catch (error) {
+    console.error("🚨 Error in /auth/me:", error);
     res.status(500).json({ message: "Server error" });
     console.error(error.message);
   }

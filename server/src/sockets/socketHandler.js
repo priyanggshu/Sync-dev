@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
-import { SocketEvent } from "./types/socket";
-import { USER_CONNECTION_STATUS } from "./types/user";
+import { SocketEvent } from "./types/socket.js";
+import { USER_CONNECTION_STATUS } from "./types/user.js";
 
 let userSocketMap = [];
 
