@@ -13,6 +13,8 @@
     "@reduxjs/toolkit": "^2.5.1",
     "@tailwindcss/vite": "^4.0.6",
     "axios": "^1.7.9",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
     "lang-map": "^0.4.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -21,7 +23,8 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.5",
     "socket.io-client": "^4.8.1",
-    "tailwindcss": "^4.0.6"
+    "tailwindcss": "^4.0.6",
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
